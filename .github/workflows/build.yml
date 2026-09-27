@@ -5,35 +5,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - name: Unzip Project
+      - name: Unzip
         run: |
           unzip -o petmorph-final.zip
-          if [ -d "petmorph-final" ]; then
-            mv petmorph-final/*. || true
-            rm -rf petmorph-final
-          fi
-          rm -f petmorph-final.zip
-          ls -la
-
-      - name: Set up JDK 17
+          mv petmorph-final/* .
+          rm -rf petmorph-final petmorph-final.zip
+      - name: JDK 17
         uses: actions/setup-java@v4
         with:
-          distribution: 'temurin'
+          distribution: temurin
           java-version: '17'
-
-      - name: Setup Gradle
+      - name: Gradle
         uses: gradle/actions/setup-gradle@v3
-
-      - name: Build APK
+      - name: Build
         run: |
-          chmod +x gradlew || true
-          if [ -f./gradlew ]; then
-           ./gradlew assembleDebug
-          else
-            gradle assembleDebug
-          fi
-
+          chmod +x gradlew
+         ./gradlew assembleDebug
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
